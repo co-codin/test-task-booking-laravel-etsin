@@ -1,7 +1,5 @@
 FROM php:8.4-fpm
 
-COPY docker/php.ini /usr/local/etc/php/php.ini
-
 RUN apt-get update && apt-get install -y \
     git \
     zip \
@@ -10,17 +8,19 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
   && docker-php-ext-install pdo pdo_pgsql zip
 
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-COPY .. /var/www
+COPY . /var/www
 
-RUN composer install --no-dev --optimize-autoloader
-
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+COPY docker/php.ini /usr/local/etc/php/php.ini
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["entrypoint.sh"]
