@@ -1,19 +1,20 @@
 <?php
 
-namespace Modules\Resource\Providers;
+namespace Modules\User\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class ResourceServiceProvider extends ServiceProvider
+class UserServiceProvider extends ServiceProvider
 {
     use PathNamespace;
 
-    protected string $name = 'Resource';
+    protected string $name = 'User';
 
-    protected string $nameLower = 'resource';
+    protected string $nameLower = 'user';
 
     /**
      * Boot the application events.
@@ -24,6 +25,7 @@ class ResourceServiceProvider extends ServiceProvider
         $this->registerCommandSchedules();
         $this->registerTranslations();
         $this->registerConfig();
+        $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
     }
 
@@ -116,10 +118,37 @@ class ResourceServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register views.
+     */
+    public function registerViews(): void
+    {
+        $viewPath = resource_path('views/modules/'.$this->nameLower);
+        $sourcePath = module_path($this->name, 'resources/views');
+
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
+
+        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
+
+        Blade::componentNamespace(config('modules.namespace').'\\'.$this->name.'\\View\\Components', $this->nameLower);
+    }
+
+    /**
      * Get the services provided by the provider.
      */
     public function provides(): array
     {
         return [];
+    }
+
+    private function getPublishableViewPaths(): array
+    {
+        $paths = [];
+        foreach (config('view.paths') as $path) {
+            if (is_dir($path.'/modules/'.$this->nameLower)) {
+                $paths[] = $path.'/modules/'.$this->nameLower;
+            }
+        }
+
+        return $paths;
     }
 }

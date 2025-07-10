@@ -2,9 +2,11 @@
 
 namespace Modules\Resource\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Modules\Resource\Database\Factories\ResourceFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Booking\Models\Booking;
+use Modules\Resource\Database\Factories\ResourceFactory;
 
 class Resource extends Model
 {
@@ -13,10 +15,15 @@ class Resource extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [];
+    protected $guarded = ['id'];
 
-    // protected static function newFactory(): ResourceFactory
-    // {
-    //     // return ResourceFactory::new();
-    // }
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    protected static function newFactory(): ResourceFactory
+    {
+        return ResourceFactory::new();
+    }
 }
