@@ -3,6 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Resource\Http\Controllers\ResourceController;
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('resources', ResourceController::class)->names('resource');
-});
+Route::apiResource('resources', ResourceController::class)
+    ->only(['index', 'store']);
+Route::get('resources/{id}/bookings', [ResourceController::class, 'bookings']);
