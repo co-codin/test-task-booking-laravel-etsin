@@ -3,6 +3,7 @@
 namespace Modules\Booking\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Booking\Services\BookingService;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -34,6 +35,7 @@ class BookingServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        $this->app->singleton(BookingService::class);
     }
 
     /**

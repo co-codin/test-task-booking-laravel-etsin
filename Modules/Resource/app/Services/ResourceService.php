@@ -13,7 +13,7 @@ class ResourceService
         return Resource::query()->create($data->toArray());
     }
 
-    public function listAll(): Collection
+    public function all(): Collection
     {
         return Resource::all();
     }

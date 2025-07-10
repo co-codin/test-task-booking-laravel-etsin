@@ -3,6 +3,7 @@
 namespace Modules\Resource\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Resource\Services\ResourceService;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -34,6 +35,7 @@ class ResourceServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        $this->app->singleton(ResourceService::class);
     }
 
     /**
