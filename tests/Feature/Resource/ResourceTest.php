@@ -3,6 +3,7 @@
 namespace Feature\Resource;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Modules\Booking\Models\Booking;
 use Modules\Resource\Models\Resource;
 use Modules\User\Models\User;
 use Tests\TestCase;
@@ -34,24 +35,42 @@ class ResourceTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_bookings_for_resource(): void
+    public function it_returns_bookings_for_resource_when_created_via_api(): void
     {
         $resource = Resource::factory()->create();
-
-        $user = User::factory()->create();
+        $user     = User::factory()->create();
 
         $bookingData = [
             'resource_id' => $resource->id,
-            'user_id' => $user->id,
-            'start_time' => now()->addHour()->toDateTimeString(),
-            'end_time' => now()->addHours(2)->toDateTimeString(),
+            'user_id'     => $user->id,
+            'start_time'  => now()->addHour()->toDateTimeString(),
+            'end_time'    => now()->addHours(2)->toDateTimeString(),
         ];
 
-        $this->postJson('/api/bookings', $bookingData)->assertStatus(201);
+        $this->postJson('/api/bookings', $bookingData)
+            ->assertStatus(201);
 
         $this->getJson("/api/resources/{$resource->id}/bookings")
             ->assertStatus(200)
             ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.resource.id', $resource->id);
+        ;
+    }
+
+    /** @test */
+    public function it_returns_multiple_bookings_for_resource_when_created_via_factory(): void
+    {
+        $resource = Resource::factory()->create();
+        $user     = User::factory()->create();
+
+        Booking::factory()
+            ->for($resource)
+            ->for($user)
+            ->count(2)
+            ->create();
+
+        $this->getJson("/api/resources/{$resource->id}/bookings")
+            ->assertStatus(200)
+            ->assertJsonCount(2, 'data')
+            ->assertJsonPath('data.1.resource.id', $resource->id);
     }
 }
