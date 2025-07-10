@@ -63,6 +63,11 @@
     "extra": {
         "laravel": {
             "dont-discover": []
+        },
+        "merge-plugin": {
+            "include": [
+                "Modules/*/composer.json"
+            ]
         }
     },
     "config": {
@@ -76,10 +81,5 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
-    "merge-plugin": {
-        "include": [
-            "Modules/*/composer.json"
-        ]
-    }
+    "prefer-stable": true
 }
