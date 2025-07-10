@@ -38,13 +38,13 @@ class ResourceTest extends TestCase
     public function it_returns_bookings_for_resource_when_created_via_api(): void
     {
         $resource = Resource::factory()->create();
-        $user     = User::factory()->create();
+        $user = User::factory()->create();
 
         $bookingData = [
             'resource_id' => $resource->id,
-            'user_id'     => $user->id,
-            'start_time'  => now()->addHour()->toDateTimeString(),
-            'end_time'    => now()->addHours(2)->toDateTimeString(),
+            'user_id' => $user->id,
+            'start_time' => now()->addHour()->toDateTimeString(),
+            'end_time' => now()->addHours(2)->toDateTimeString(),
         ];
 
         $this->postJson('/api/bookings', $bookingData)
@@ -52,15 +52,14 @@ class ResourceTest extends TestCase
 
         $this->getJson("/api/resources/{$resource->id}/bookings")
             ->assertStatus(200)
-            ->assertJsonCount(1, 'data')
-        ;
+            ->assertJsonCount(1, 'data');
     }
 
     /** @test */
     public function it_returns_multiple_bookings_for_resource_when_created_via_factory(): void
     {
         $resource = Resource::factory()->create();
-        $user     = User::factory()->create();
+        $user = User::factory()->create();
 
         Booking::factory()
             ->for($resource)
@@ -70,7 +69,6 @@ class ResourceTest extends TestCase
 
         $this->getJson("/api/resources/{$resource->id}/bookings")
             ->assertStatus(200)
-            ->assertJsonCount(2, 'data')
-            ;
+            ->assertJsonCount(2, 'data');
     }
 }

@@ -2,28 +2,30 @@
 
 namespace Unit\Booking;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Booking\Data\BookingData;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Services\BookingService;
 use Modules\Resource\Models\Resource;
 use Modules\User\Models\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BookingServiceTest extends TestCase
 {
     use RefreshDatabase;
 
     private BookingService $service;
+
     private Resource $resource;
+
     private User $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service  = $this->app->make(BookingService::class);
+        $this->service = $this->app->make(BookingService::class);
         $this->resource = Resource::factory()->create();
-        $this->user     = User::factory()->create();
+        $this->user = User::factory()->create();
     }
 
     /** @test */
@@ -31,16 +33,16 @@ class BookingServiceTest extends TestCase
     {
         $dto = BookingData::from([
             'resource_id' => $this->resource->id,
-            'user_id'     => $this->user->id,
-            'start_time'  => now()->toDateTimeString(),
-            'end_time'    => now()->addHour()->toDateTimeString(),
+            'user_id' => $this->user->id,
+            'start_time' => now()->toDateTimeString(),
+            'end_time' => now()->addHour()->toDateTimeString(),
         ]);
 
         $booking = $this->service->create($dto);
 
         $this->assertInstanceOf(Booking::class, $booking);
         $this->assertDatabaseHas('bookings', [
-            'id'          => $booking->id,
+            'id' => $booking->id,
             'resource_id' => $this->resource->id,
         ]);
     }

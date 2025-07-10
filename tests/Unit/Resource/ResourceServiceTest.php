@@ -2,12 +2,11 @@
 
 namespace Unit\Resource;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Resource\Data\ResourceData;
 use Modules\Resource\Models\Resource;
 use Modules\Resource\Services\ResourceService;
 use Tests\TestCase;
-
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ResourceServiceTest extends TestCase
 {
@@ -25,15 +24,15 @@ class ResourceServiceTest extends TestCase
     public function it_creates_resource_via_data(): void
     {
         $data = ResourceData::from([
-            'name'        => 'Test Room',
-            'type'        => 'room',
+            'name' => 'Test Room',
+            'type' => 'room',
             'description' => 'Test Desc',
         ]);
 
         $resource = $this->service->create($data);
 
         $this->assertDatabaseHas('resources', [
-            'id'   => $resource->id,
+            'id' => $resource->id,
             'name' => 'Test Room',
         ]);
     }
