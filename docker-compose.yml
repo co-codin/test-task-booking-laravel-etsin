@@ -37,6 +37,18 @@ services:
         networks:
             - laravel
 
+    db_test:
+        image: postgres:15-alpine
+        container_name: laravel-db-test
+        environment:
+            POSTGRES_DB: laravel_test
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: secret
+        ports:
+            - "5433:5433"
+        networks:
+            - laravel
+
     db:
         image: postgres:15-alpine
         container_name: laravel-db
