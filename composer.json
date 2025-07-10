@@ -76,5 +76,10 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "merge-plugin": {
+        "include": [
+            "Modules/*/composer.json"
+        ]
+    }
 }
