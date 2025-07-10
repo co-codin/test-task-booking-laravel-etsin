@@ -3,6 +3,8 @@
 namespace Modules\Booking\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\Resource\Models\Resource;
+use Modules\User\Models\User;
 
 class BookingFactory extends Factory
 {
@@ -16,6 +18,14 @@ class BookingFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        $start = $this->faker->dateTimeBetween('+1 days', '+7 days');
+        $end = (clone $start)->modify('+'.$this->faker->numberBetween(1, 4).' hours');
+
+        return [
+            'resource_id' => Resource::factory(),
+            'user_id' => User::factory(),
+            'start_time' => $start->format('Y-m-d H:i:s'),
+            'end_time' => $end->format('Y-m-d H:i:s'),
+        ];
     }
 }

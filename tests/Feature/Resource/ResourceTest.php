@@ -2,11 +2,10 @@
 
 namespace Feature\Resource;
 
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Modules\Resource\Models\Resource;
 use Modules\User\Models\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ResourceTest extends TestCase
 {
@@ -16,8 +15,8 @@ class ResourceTest extends TestCase
     public function it_creates_and_lists_resources(): void
     {
         $payload = [
-            'name'        => 'Room A',
-            'type'        => 'room',
+            'name' => 'Room A',
+            'type' => 'room',
             'description' => 'Конференц-зал',
         ];
 
@@ -38,13 +37,14 @@ class ResourceTest extends TestCase
     public function it_returns_bookings_for_resource(): void
     {
         $resource = Resource::factory()->create();
-        $user     = User::factory()->create();
+
+        $user = User::factory()->create();
 
         $bookingData = [
             'resource_id' => $resource->id,
-            'user_id'     => $user->id,
-            'start_time'  => now()->addHour()->toDateTimeString(),
-            'end_time'    => now()->addHours(2)->toDateTimeString(),
+            'user_id' => $user->id,
+            'start_time' => now()->addHour()->toDateTimeString(),
+            'end_time' => now()->addHours(2)->toDateTimeString(),
         ];
 
         $this->postJson('/api/bookings', $bookingData)->assertStatus(201);

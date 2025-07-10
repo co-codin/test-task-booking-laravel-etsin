@@ -17,6 +17,10 @@ class ResourceFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        return [
+            'name' => $this->faker->words(2, true),
+            'type' => $this->faker->randomElement(['room', 'vehicle', 'equipment']),
+            'description' => $this->faker->optional()->sentence(),
+        ];
     }
 }
