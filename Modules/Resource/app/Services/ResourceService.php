@@ -3,7 +3,7 @@
 namespace Modules\Resource\Services;
 
 use Illuminate\Database\Eloquent\Collection;
-use Modules\Resource\DTO\ResourceData;
+use Modules\Resource\Data\ResourceData;
 use Modules\Resource\Models\Resource;
 
 class ResourceService

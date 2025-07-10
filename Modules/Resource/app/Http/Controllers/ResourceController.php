@@ -4,7 +4,7 @@ namespace Modules\Resource\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Booking\Http\Resources\BookingResource;
-use Modules\Resource\DTO\ResourceData;
+use Modules\Resource\Data\ResourceData;
 use Modules\Resource\Http\Requests\StoreResourceRequest;
 use Modules\Resource\Http\Resources\ResourceResource;
 use Modules\Resource\Services\ResourceService;
